@@ -1,0 +1,19 @@
+# NetBeans build output
+/build/
+/dist/
+
+# NetBeans private local settings
+/nbproject/private/
+
+# Java compiled files
+*.class
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
