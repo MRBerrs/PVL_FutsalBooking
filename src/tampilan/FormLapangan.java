@@ -8,11 +8,13 @@ package tampilan;
  *
  * @author Administrator
  */
+import com.formdev.flatlaf.FlatDarkLaf;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
 
@@ -25,8 +27,15 @@ public class FormLapangan extends javax.swing.JFrame {
      */
     public FormLapangan() {
         initComponents();
-        setLocationRelativeTo(null);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1200, 720));
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        setResizable(true);
+        rebuildLayoutLapanganLikeBooking();
+        styleFormLapangan();
         datatable();
+        setupTableLapangan();
         kosong();
         aktif();
     }
@@ -118,6 +127,7 @@ public class FormLapangan extends javax.swing.JFrame {
         rs.close();
         st.close();
 
+        setupTableLapangan();
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Gagal menampilkan data lapangan: " + e.getMessage());
     }
@@ -127,6 +137,275 @@ public class FormLapangan extends javax.swing.JFrame {
     Object value = tblLapangan.getValueAt(baris, kolom);
     return value == null ? "" : value.toString();
     }
+    
+    private void rebuildLayoutLapanganLikeBooking() {
+    getContentPane().removeAll();
+    getContentPane().setLayout(new java.awt.BorderLayout());
+
+    jPanel1.removeAll();
+    jPanel1.setLayout(new java.awt.BorderLayout(0, 18));
+    jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(28, 28, 28, 8));
+
+    javax.swing.JPanel headerPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+    headerPanel.setOpaque(false);
+    headerPanel.add(jLabel1, java.awt.BorderLayout.WEST);
+
+    javax.swing.JPanel contentPanel = new javax.swing.JPanel(new java.awt.BorderLayout(8, 0));
+    contentPanel.setOpaque(false);
+
+    javax.swing.JPanel leftPanel = new javax.swing.JPanel(new java.awt.BorderLayout(0, 22));
+    leftPanel.setOpaque(false);
+
+    javax.swing.JPanel searchPanel = new javax.swing.JPanel(new java.awt.BorderLayout(8, 8));
+    searchPanel.setOpaque(false);
+
+    javax.swing.JPanel searchInputPanel = new javax.swing.JPanel(new java.awt.BorderLayout(8, 0));
+    searchInputPanel.setOpaque(false);
+    searchInputPanel.add(txtCari, java.awt.BorderLayout.CENTER);
+    searchInputPanel.add(btnCari, java.awt.BorderLayout.EAST);
+
+    jLabel2.setText("PENCARIAN");
+
+    searchPanel.add(jLabel2, java.awt.BorderLayout.NORTH);
+    searchPanel.add(searchInputPanel, java.awt.BorderLayout.CENTER);
+
+    javax.swing.JPanel formPanel = new javax.swing.JPanel(new java.awt.GridBagLayout());
+    formPanel.setOpaque(false);
+
+    java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+    gbc.insets = new java.awt.Insets(6, 0, 6, 18);
+    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gbc.weightx = 1.0;
+
+    jLabel9.setText("INPUT DATA");
+
+    addTitle(formPanel, gbc, 0, jLabel9);
+
+    jLabel3.setText("Kode Lapangan");
+    jLabel4.setText("Nama Lapangan");
+    addPair(formPanel, gbc, 1, jLabel3, txtKodeLapangan, jLabel4, txtNamaLapangan);
+
+    jLabel8.setText("Jenis Lantai");
+    jLabel5.setText("Kapasitas");
+    addPair(formPanel, gbc, 3, jLabel8, cmbJenisLantai, jLabel5, txtKapasitas);
+
+    jLabel6.setText("Harga Per Jam");
+    jLabel10.setText("Status");
+    addPair(formPanel, gbc, 5, jLabel6, txtHargaPerJam, jLabel10, cmbStatus);
+
+    jLabel7.setText("Deskripsi");
+    addFullField(formPanel, gbc, 7, jLabel7, txtDeskripsi);
+
+    javax.swing.JPanel buttonPanel = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 14, 0));
+    buttonPanel.setOpaque(false);
+    buttonPanel.add(btnSimpan);
+    buttonPanel.add(btnEdit);
+    buttonPanel.add(btnHapus);
+    buttonPanel.add(btnClear);
+    buttonPanel.add(btnKeluar);
+
+    gbc.gridx = 0;
+    gbc.gridy = 9;
+    gbc.gridwidth = 4;
+    gbc.insets = new java.awt.Insets(18, 0, 0, 18);
+    formPanel.add(buttonPanel, gbc);
+
+    leftPanel.add(searchPanel, java.awt.BorderLayout.NORTH);
+    leftPanel.add(formPanel, java.awt.BorderLayout.CENTER);
+
+    javax.swing.JPanel tablePanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+    tablePanel.setOpaque(false);
+    tablePanel.setPreferredSize(new java.awt.Dimension(560, 10));
+    tablePanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+    contentPanel.add(leftPanel, java.awt.BorderLayout.CENTER);
+    contentPanel.add(tablePanel, java.awt.BorderLayout.EAST);
+
+    jPanel1.add(headerPanel, java.awt.BorderLayout.NORTH);
+    jPanel1.add(contentPanel, java.awt.BorderLayout.CENTER);
+
+    getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
+    getContentPane().revalidate();
+    getContentPane().repaint();
+    }
+    
+    private void addTitle(javax.swing.JPanel panel, java.awt.GridBagConstraints gbc, int row, java.awt.Component component) {
+    gbc.gridx = 0;
+    gbc.gridy = row;
+    gbc.gridwidth = 4;
+    gbc.weightx = 1.0;
+    gbc.insets = new java.awt.Insets(0, 0, 10, 18);
+    panel.add(component, gbc);
+    }
+    
+    private void addPair(javax.swing.JPanel panel, java.awt.GridBagConstraints gbc, int row,
+        javax.swing.JLabel label1, java.awt.Component component1,
+        javax.swing.JLabel label2, java.awt.Component component2) {
+
+    gbc.gridwidth = 1;
+    gbc.insets = new java.awt.Insets(6, 0, 4, 18);
+
+    gbc.gridx = 0;
+    gbc.gridy = row;
+    gbc.weightx = 1.0;
+    panel.add(label1, gbc);
+
+    gbc.gridx = 2;
+    gbc.gridy = row;
+    gbc.weightx = 1.0;
+    panel.add(label2, gbc);
+
+    gbc.insets = new java.awt.Insets(0, 0, 12, 18);
+
+    gbc.gridx = 0;
+    gbc.gridy = row + 1;
+    gbc.weightx = 1.0;
+    panel.add(component1, gbc);
+
+    gbc.gridx = 2;
+    gbc.gridy = row + 1;
+    gbc.weightx = 1.0;
+    panel.add(component2, gbc);
+    }
+    
+    private void addFullField(javax.swing.JPanel panel, java.awt.GridBagConstraints gbc, int row,
+        javax.swing.JLabel label, java.awt.Component component) {
+
+    gbc.gridwidth = 4;
+    gbc.insets = new java.awt.Insets(6, 0, 4, 18);
+    gbc.gridx = 0;
+    gbc.gridy = row;
+    gbc.weightx = 1.0;
+    panel.add(label, gbc);
+
+    gbc.insets = new java.awt.Insets(0, 0, 12, 18);
+    gbc.gridx = 0;
+    gbc.gridy = row + 1;
+    gbc.weightx = 1.0;
+    panel.add(component, gbc);
+    }
+    
+    private void styleComboBox(javax.swing.JComboBox<String> combo, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border) {
+
+    combo.setBackground(bg);
+    combo.setForeground(fg);
+    combo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    combo.setBorder(javax.swing.BorderFactory.createLineBorder(border, 1));
+    combo.setPreferredSize(new java.awt.Dimension(combo.getPreferredSize().width, 38));
+    }
+    
+    private void styleTextField(javax.swing.JTextField field, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border, java.awt.Color caret) {
+
+    field.setBackground(bg);
+    field.setForeground(fg);
+    field.setCaretColor(caret);
+    field.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    field.setOpaque(true);
+    field.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(border, 1),
+            javax.swing.BorderFactory.createEmptyBorder(6, 10, 6, 10)
+    ));
+    field.setPreferredSize(new java.awt.Dimension(field.getPreferredSize().width, 38));
+    }
+    
+    private void styleButton(javax.swing.JButton button, String text, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border) {
+
+    button.setText(text);
+    button.setBackground(bg);
+    button.setForeground(fg);
+    button.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+    button.setFocusPainted(false);
+    button.setOpaque(true);
+    button.setContentAreaFilled(true);
+    button.setBorderPainted(false);
+    button.putClientProperty("JButton.buttonType", "square");
+
+    button.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+        javax.swing.BorderFactory.createLineBorder(border, 1),
+        javax.swing.BorderFactory.createEmptyBorder(6, 16, 6, 16)
+    ));
+    }
+    
+    private void setupTableLapangan() {
+    tblLapangan.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+    tblLapangan.setFillsViewportHeight(true);
+    tblLapangan.setRowHeight(34);
+    tblLapangan.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+    tblLapangan.setBackground(AppTheme.ABYSS);
+    tblLapangan.setForeground(AppTheme.SLATE);
+    tblLapangan.setGridColor(AppTheme.RIM);
+    tblLapangan.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    tblLapangan.setSelectionBackground(AppTheme.INDIGO_GHOST);
+    tblLapangan.setSelectionForeground(AppTheme.SNOW);
+    tblLapangan.setShowVerticalLines(false);
+    tblLapangan.setShowHorizontalLines(true);
+
+    tblLapangan.getTableHeader().setBackground(AppTheme.COURT);
+    tblLapangan.getTableHeader().setForeground(AppTheme.INDIGO_LIGHT);
+    tblLapangan.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+
+    jScrollPane1.getViewport().setBackground(AppTheme.ABYSS);
+    jScrollPane1.setBackground(AppTheme.ABYSS);
+    jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(AppTheme.RIM, 1));
+
+    jScrollPane1.setVerticalScrollBarPolicy(
+            javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
+    );
+
+    jScrollPane1.setHorizontalScrollBarPolicy(
+            javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+    );
+    }
+    
+    private void styleFormLapangan() {
+    getContentPane().setBackground(AppTheme.ABYSS);
+    jPanel1.setBackground(AppTheme.ABYSS);
+    jPanel1.setOpaque(true);
+
+    jLabel1.setText("DATA LAPANGAN");
+    jLabel1.setForeground(AppTheme.SNOW);
+    jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 34));
+
+    jLabel2.setForeground(AppTheme.INDIGO_LIGHT);
+    jLabel2.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
+
+    jLabel9.setForeground(AppTheme.INDIGO_LIGHT);
+    jLabel9.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+
+    javax.swing.JLabel[] labels = {
+        jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8, jLabel10
+    };
+
+    for (javax.swing.JLabel label : labels) {
+        label.setForeground(AppTheme.SLATE);
+        label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+    }
+
+    styleTextField(txtCari, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtKodeLapangan, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtNamaLapangan, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtKapasitas, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtHargaPerJam, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtDeskripsi, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+
+    styleComboBox(cmbJenisLantai, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbStatus, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+
+    styleButton(btnCari, "Cari", AppTheme.INDIGO, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnSimpan, "Simpan", AppTheme.EMERALD_TINT, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnEdit, "Edit", AppTheme.INDIGO_DEEP, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnHapus, "Hapus", AppTheme.CORAL_TINT, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnClear, "Bersihkan", AppTheme.ELEVATED, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnKeluar, "Keluar", AppTheme.ELEVATED, AppTheme.SLATE, AppTheme.RIM);
+
+    setupTableLapangan();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -268,7 +547,7 @@ public class FormLapangan extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtKapasitas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtNamaLapangan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(txtCari)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -277,11 +556,11 @@ public class FormLapangan extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addGap(174, 174, 174)
+                                .addGap(250, 250, 250)
                                 .addComponent(jLabel4))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
-                                .addGap(193, 193, 193)
+                                .addGap(269, 269, 269)
                                 .addComponent(jLabel5))
                             .addComponent(jLabel7)
                             .addComponent(jLabel2)
@@ -356,7 +635,7 @@ public class FormLapangan extends javax.swing.JFrame {
                     .addComponent(btnHapus)
                     .addComponent(btnClear)
                     .addComponent(btnKeluar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -365,7 +644,7 @@ public class FormLapangan extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -451,6 +730,7 @@ public class FormLapangan extends javax.swing.JFrame {
         rs.close();
         pst.close();
 
+        setupTableLapangan();
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Gagal mencari data lapangan: " + e.getMessage());
     }
@@ -630,15 +910,19 @@ public class FormLapangan extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
+             System.setProperty("flatlaf.useNativeLibrary", "false");
+        UIManager.put("Button.arc", 16);
+        UIManager.put("Component.arc", 14);
+        UIManager.put("TextComponent.arc", 14);
+        UIManager.put("ScrollBar.width", 12);
+        UIManager.put("Table.rowHeight", 30);
+        UIManager.put("Table.showHorizontalLines", true);
+        UIManager.put("Table.showVerticalLines", true);
+
+        FlatDarkLaf.setup();
+    } catch (Exception e) {
+        System.out.println("FlatLaf gagal dimuat: " + e.getMessage());
+    }
         //</editor-fold>
 
         /* Create and display the form */

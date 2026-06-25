@@ -74,20 +74,13 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="btnPembayaran" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="btnLapangan" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="btnBooking" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="btnMember" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnLaporan" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="btnPembayaran" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btnLapangan" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btnBooking" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btnMember" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btnLaporan" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                   </Group>

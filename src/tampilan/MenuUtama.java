@@ -4,6 +4,9 @@
  */
 package tampilan;
 
+import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.UIManager;
+
 /**
  *
  * @author Administrator
@@ -18,8 +21,69 @@ public class MenuUtama extends javax.swing.JFrame {
     public MenuUtama() {
         initComponents();
         setLocationRelativeTo(null);
+        setSize(900, 560);
+        setResizable(false);
+        styleMenuUtama();
     }
 
+    
+    private void styleMenuButton(javax.swing.JButton button, String text, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border) {
+
+    button.setText(text);
+    button.setBackground(bg);
+    button.setForeground(fg);
+    button.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+    button.setFocusPainted(false);
+    button.setOpaque(true);
+    button.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+        javax.swing.BorderFactory.createLineBorder(border, 1),
+        javax.swing.BorderFactory.createEmptyBorder(11, 18, 11, 18)
+    ));
+    }
+    
+    private void styleMenuUtama() {
+    java.awt.Color canvas = new java.awt.Color(17, 17, 20);       // #111114
+    java.awt.Color surface1 = new java.awt.Color(26, 26, 31);     // #1a1a1f
+    java.awt.Color surface2 = new java.awt.Color(34, 34, 40);     // #222228
+    java.awt.Color border = new java.awt.Color(42, 42, 50);       // #2a2a32
+
+    java.awt.Color textPrimary = new java.awt.Color(232, 232, 246);   // #e8e8f6
+    java.awt.Color textSecondary = new java.awt.Color(152, 152, 168); // #9898a8
+    java.awt.Color purpleMain = new java.awt.Color(83, 74, 183);      // #534ab7
+    java.awt.Color purpleLight = new java.awt.Color(175, 169, 236);   // #afa9ec
+    java.awt.Color danger = new java.awt.Color(220, 80, 95);
+
+    getContentPane().setBackground(canvas);
+
+    jPanel1.setBackground(canvas);
+    jPanel2.setBackground(surface1);
+
+    jLabel1.setForeground(textPrimary);
+    jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 22));
+
+    jLabel3.setForeground(purpleLight);
+    jLabel3.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 18));
+
+        styleMenuButton(btnMember, "Data Member", purpleMain, textPrimary, border);
+        styleMenuButton(btnLapangan, "Data Lapangan", purpleMain, textPrimary, border);
+        styleMenuButton(btnBooking, "Booking", purpleMain, textPrimary, border);
+        styleMenuButton(btnPembayaran, "Pembayaran", purpleMain, textPrimary, border);
+        styleMenuButton(btnLaporan, "Laporan", purpleMain, textPrimary, border);
+
+    btnLogout.setText("Logout");
+    btnLogout.setBackground(surface2);
+    btnLogout.setForeground(danger);
+    btnLogout.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+    btnLogout.setFocusPainted(false);
+    btnLogout.setOpaque(true);
+    btnLogout.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+        javax.swing.BorderFactory.createLineBorder(border, 1),
+        javax.swing.BorderFactory.createEmptyBorder(10, 18, 10, 18)
+    ));
+
+    jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, border));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -194,15 +258,19 @@ public class MenuUtama extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
+             System.setProperty("flatlaf.useNativeLibrary", "false");
+        UIManager.put("Button.arc", 16);
+        UIManager.put("Component.arc", 14);
+        UIManager.put("TextComponent.arc", 14);
+        UIManager.put("ScrollBar.width", 12);
+        UIManager.put("Table.rowHeight", 30);
+        UIManager.put("Table.showHorizontalLines", true);
+        UIManager.put("Table.showVerticalLines", true);
+
+        FlatLightLaf.setup();
+    } catch (Exception e) {
+        System.out.println("FlatLaf gagal dimuat: " + e.getMessage());
+    }
         //</editor-fold>
 
         /* Create and display the form */
