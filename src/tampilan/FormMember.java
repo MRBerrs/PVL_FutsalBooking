@@ -15,7 +15,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
 import javax.swing.UIManager;
 
 public class FormMember extends javax.swing.JFrame {
@@ -284,11 +284,10 @@ public class FormMember extends javax.swing.JFrame {
     field.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
     field.setOpaque(true);
     field.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-        javax.swing.BorderFactory.createLineBorder(border, 1),
-        javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10)
+            javax.swing.BorderFactory.createLineBorder(border, 1),
+            javax.swing.BorderFactory.createEmptyBorder(6, 10, 6, 10)
     ));
-
-    field.setPreferredSize(new java.awt.Dimension(field.getPreferredSize().width, 34));
+    field.setPreferredSize(new java.awt.Dimension(field.getPreferredSize().width, 38));
     }
     
     private void styleButton(javax.swing.JButton button, String text, java.awt.Color bg,
@@ -305,16 +304,33 @@ public class FormMember extends javax.swing.JFrame {
     button.putClientProperty("JButton.buttonType", "square");
     button.setPreferredSize(new java.awt.Dimension(104, 42));
     button.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-        javax.swing.BorderFactory.createLineBorder(border, 1),
-        javax.swing.BorderFactory.createEmptyBorder(8, 14, 8, 14)
+            javax.swing.BorderFactory.createLineBorder(border, 1),
+            javax.swing.BorderFactory.createEmptyBorder(8, 14, 8, 14)
     ));
     }
         
     private void setupTableMember() {
     tblMember.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
     tblMember.setFillsViewportHeight(true);
-    tblMember.setRowHeight(26);
+    tblMember.setRowHeight(34);
     tblMember.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+    tblMember.setBackground(AppTheme.ABYSS);
+    tblMember.setForeground(AppTheme.SLATE);
+    tblMember.setGridColor(AppTheme.RIM);
+    tblMember.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    tblMember.setSelectionBackground(AppTheme.INDIGO_GHOST);
+    tblMember.setSelectionForeground(AppTheme.SNOW);
+    tblMember.setShowVerticalLines(false);
+    tblMember.setShowHorizontalLines(true);
+
+    tblMember.getTableHeader().setBackground(AppTheme.COURT);
+    tblMember.getTableHeader().setForeground(AppTheme.INDIGO_LIGHT);
+    tblMember.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+
+    jScrollPane1.getViewport().setBackground(AppTheme.ABYSS);
+    jScrollPane1.setBackground(AppTheme.ABYSS);
+    jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(AppTheme.RIM, 1));
 
     jScrollPane1.setVerticalScrollBarPolicy(
             javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
@@ -325,34 +341,29 @@ public class FormMember extends javax.swing.JFrame {
     );
     }
     
+    private void styleComboBox(javax.swing.JComboBox<String> combo, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border) {
+
+    combo.setBackground(bg);
+    combo.setForeground(fg);
+    combo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    combo.setBorder(javax.swing.BorderFactory.createLineBorder(border, 1));
+    combo.setPreferredSize(new java.awt.Dimension(combo.getPreferredSize().width, 38));
+    }
+    
     private void styleFormMember() {
-    java.awt.Color bg = new java.awt.Color(17, 17, 20);
-    java.awt.Color panel = new java.awt.Color(26, 26, 31);
-    java.awt.Color input = new java.awt.Color(12, 12, 16);
-    java.awt.Color border = new java.awt.Color(42, 42, 50);
-
-    java.awt.Color textPrimary = new java.awt.Color(232, 232, 246);
-    java.awt.Color textSecondary = new java.awt.Color(152, 152, 168);
-    java.awt.Color purple = new java.awt.Color(83, 74, 183);
-    java.awt.Color purpleLight = new java.awt.Color(175, 169, 236);
-
-    java.awt.Color success = new java.awt.Color(15, 62, 36);
-    java.awt.Color editBlue = new java.awt.Color(48, 99, 225);
-    java.awt.Color danger = new java.awt.Color(135, 34, 48);
-    java.awt.Color neutral = new java.awt.Color(48, 48, 58);
-
-    getContentPane().setBackground(bg);
-    jPanel1.setBackground(bg);
+    getContentPane().setBackground(AppTheme.ABYSS);
+    jPanel1.setBackground(AppTheme.ABYSS);
     jPanel1.setOpaque(true);
 
     jLabel1.setText("DATA MEMBER");
-    jLabel1.setForeground(textPrimary);
+    jLabel1.setForeground(AppTheme.SNOW);
     jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 34));
 
-    jLabel2.setForeground(purpleLight);
+    jLabel2.setForeground(AppTheme.INDIGO_LIGHT);
     jLabel2.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
 
-    jLabel9.setForeground(purpleLight);
+    jLabel9.setForeground(AppTheme.INDIGO_LIGHT);
     jLabel9.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
 
     javax.swing.JLabel[] labels = {
@@ -360,45 +371,26 @@ public class FormMember extends javax.swing.JFrame {
     };
 
     for (javax.swing.JLabel label : labels) {
-        label.setForeground(textSecondary);
+        label.setForeground(AppTheme.SLATE);
         label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
     }
 
-    styleTextField(txtCari, input, textPrimary, border, purpleLight);
-    styleTextField(txtKodeMember, input, textPrimary, border, purpleLight);
-    styleTextField(txtNama, input, textPrimary, border, purpleLight);
-    styleTextField(txtNoTelp, input, textPrimary, border, purpleLight);
-    styleTextField(txtAlamat, input, textPrimary, border, purpleLight);
+    styleTextField(txtCari, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtKodeMember, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtNama, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtNoTelp, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtAlamat, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
 
-    cmbJenisKelamin.setBackground(input);
-    cmbJenisKelamin.setForeground(textPrimary);
-    cmbJenisKelamin.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
-    cmbJenisKelamin.setBorder(javax.swing.BorderFactory.createLineBorder(border, 1));
+    styleComboBox(cmbJenisKelamin, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
 
-    styleButton(btnCari, "Cari", purple, textPrimary, border);
-    styleButton(btnSimpan, "Simpan", success, textPrimary, border);
-    styleButton(btnEdit, "Edit", editBlue, java.awt.Color.WHITE, border);
-    styleButton(btnHapus, "Hapus", danger, java.awt.Color.WHITE, border);
-    styleButton(btnClear, "Clear", neutral, textPrimary, border);
-    styleButton(btnKeluar, "Keluar", neutral, textSecondary, border);
+    styleButton(btnCari, "Cari", AppTheme.INDIGO, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnSimpan, "Simpan", AppTheme.EMERALD_TINT, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnEdit, "Edit", AppTheme.INDIGO_DEEP, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnHapus, "Hapus", AppTheme.CORAL_TINT, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnClear, "Bersihkan", AppTheme.ELEVATED, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnKeluar, "Keluar", AppTheme.ELEVATED, AppTheme.SLATE, AppTheme.RIM);
 
-    tblMember.setBackground(bg);
-    tblMember.setForeground(textSecondary);
-    tblMember.setGridColor(border);
-    tblMember.setRowHeight(34);
-    tblMember.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
-    tblMember.setSelectionBackground(purple);
-    tblMember.setSelectionForeground(textPrimary);
-    tblMember.setShowVerticalLines(false);
-    tblMember.setShowHorizontalLines(true);
-
-    tblMember.getTableHeader().setBackground(panel);
-    tblMember.getTableHeader().setForeground(purpleLight);
-    tblMember.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
-
-    jScrollPane1.getViewport().setBackground(bg);
-    jScrollPane1.setBackground(bg);
-    jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(border, 1));
+    setupTableMember();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -868,7 +860,7 @@ public class FormMember extends javax.swing.JFrame {
         UIManager.put("Table.showHorizontalLines", true);
         UIManager.put("Table.showVerticalLines", true);
 
-        FlatLightLaf.setup();
+        FlatDarkLaf.setup();
     } catch (Exception e) {
         System.out.println("FlatLaf gagal dimuat: " + e.getMessage());
     }

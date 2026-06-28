@@ -13,108 +13,272 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import koneksi.koneksi;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
 import javax.swing.UIManager;
 
 public class Login extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
-
+    private javax.swing.JLabel lblLogo;
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setSize(900, 560);
+        setMinimumSize(new java.awt.Dimension(900, 560));
         setLocationRelativeTo(null);
-        setSize(720, 500);
         setResizable(false);
-
+        rebuildLayoutLogin();
         styleLogin();
     }
     
      private void styleLogin() {
-    java.awt.Color abyss = new java.awt.Color(12, 12, 16);        // #0c0c10
-    java.awt.Color canvas = new java.awt.Color(17, 17, 20);       // #111114
-    java.awt.Color surface1 = new java.awt.Color(26, 26, 31);     // #1a1a1f
-    java.awt.Color surface2 = new java.awt.Color(34, 34, 40);     // #222228
-    java.awt.Color inputDark = new java.awt.Color(12, 12, 16);    // #0c0c10
+    panelBackground.setBackground(AppTheme.ABYSS);
+    panelCard.setBackground(AppTheme.COURT);
+    getContentPane().setBackground(AppTheme.ABYSS);
 
-    java.awt.Color border = new java.awt.Color(42, 42, 50);       // #2a2a32
-    java.awt.Color borderHover = new java.awt.Color(56, 56, 62);  // #38383e
+    java.awt.Component wrapper = panelBackground.getComponent(0);
 
-    java.awt.Color textPrimary = new java.awt.Color(232, 232, 246);   // #e8e8f6
-    java.awt.Color textSecondary = new java.awt.Color(152, 152, 168); // #9898a8
-    java.awt.Color textMuted = new java.awt.Color(95, 94, 106);       // #5f5e6a
+    if (wrapper instanceof javax.swing.JPanel) {
+        javax.swing.JPanel wrapperPanel = (javax.swing.JPanel) wrapper;
+        wrapperPanel.setBackground(AppTheme.ABYSS);
 
-    java.awt.Color purpleMain = new java.awt.Color(83, 74, 183);      // #534ab7
-    java.awt.Color purpleHover = new java.awt.Color(60, 52, 137);     // #3c3489
-    java.awt.Color purpleLight = new java.awt.Color(175, 169, 236);   // #afa9ec
+        java.awt.Component brand = wrapperPanel.getComponent(0);
 
-    panelBackground.setBackground(canvas);
-    panelCard.setBackground(surface1);
-    getContentPane().setBackground(canvas);
+        if (brand instanceof javax.swing.JPanel) {
+            javax.swing.JPanel brandPanel = (javax.swing.JPanel) brand;
+            brandPanel.setBackground(AppTheme.MIDNIGHT);
+            brandPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+                    javax.swing.BorderFactory.createLineBorder(AppTheme.RIM, 1),
+                    javax.swing.BorderFactory.createEmptyBorder(40, 40, 40, 40)
+            ));
 
-    lblBrand.setForeground(purpleLight);
-    lblTitle.setForeground(textPrimary);
-    lblSubtitle.setForeground(textMuted);
-    lblUsername.setForeground(textSecondary);
-    lblPassword.setForeground(textSecondary);
+            for (java.awt.Component comp : brandPanel.getComponents()) {
+                if (comp instanceof javax.swing.JLabel) {
+                    javax.swing.JLabel label = (javax.swing.JLabel) comp;
+                    label.setForeground(AppTheme.SNOW);
+                }
+            }
+        }
+    }
 
-    lblBrand.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-    lblTitle.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 30));
+    setupLoginLogo();
+
+    lblBrand.setForeground(AppTheme.INDIGO_LIGHT);
+    lblTitle.setForeground(AppTheme.SNOW);
+    lblSubtitle.setForeground(AppTheme.SLATE);
+    lblUsername.setForeground(AppTheme.SLATE);
+    lblPassword.setForeground(AppTheme.SLATE);
+
+    lblBrand.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+    lblTitle.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 32));
     lblSubtitle.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
-    lblUsername.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-    lblPassword.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+    lblUsername.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+    lblPassword.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
 
-    txtUsername.setBackground(inputDark);
-    txtUsername.setForeground(textPrimary);
-    txtUsername.setCaretColor(purpleLight);
-    txtUsername.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
-    txtUsername.setOpaque(true);
-    txtUsername.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-        javax.swing.BorderFactory.createLineBorder(border, 1),
-        javax.swing.BorderFactory.createEmptyBorder(10, 14, 10, 14)
-    ));
+    styleTextField(txtUsername);
+    stylePasswordField(txtPassword);
 
-    txtPassword.setBackground(inputDark);
-    txtPassword.setForeground(textPrimary);
-    txtPassword.setCaretColor(purpleLight);
-    txtPassword.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
-    txtPassword.setOpaque(true);
-    txtPassword.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-        javax.swing.BorderFactory.createLineBorder(border, 1),
-        javax.swing.BorderFactory.createEmptyBorder(10, 14, 10, 14)
-    ));
-
-    chkShowPassword.setBackground(surface1);
-    chkShowPassword.setForeground(textMuted);
+    chkShowPassword.setForeground(AppTheme.SLATE);
     chkShowPassword.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
-    chkShowPassword.setText("Lihat Password");
+    chkShowPassword.setText("Tampilkan Password");
     chkShowPassword.setOpaque(false);
 
-    btnLogin.setBackground(purpleMain);
-    btnLogin.setForeground(textPrimary);
-    btnLogin.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-    btnLogin.setFocusPainted(false);
-    btnLogin.setOpaque(true);
-    btnLogin.setBorder(javax.swing.BorderFactory.createEmptyBorder(11, 32, 11, 32));
-    btnLogin.setPreferredSize(new java.awt.Dimension(280, 44));
-
-    btnCancel.setBackground(surface1);
-    btnCancel.setForeground(textMuted);
-    btnCancel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-    btnCancel.setFocusPainted(false);
-    btnCancel.setOpaque(true);
-    btnCancel.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-        javax.swing.BorderFactory.createLineBorder(border, 1),
-        javax.swing.BorderFactory.createEmptyBorder(10, 32, 10, 32)
-    ));
-    btnCancel.setPreferredSize(new java.awt.Dimension(280, 42));
+    styleButton(btnLogin, "Masuk", AppTheme.INDIGO, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnCancel, "Keluar", AppTheme.ELEVATED, AppTheme.SLATE, AppTheme.RIM);
 
     panelCard.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-        javax.swing.BorderFactory.createLineBorder(border, 1),
-        javax.swing.BorderFactory.createEmptyBorder(32, 32, 32, 32)
+            javax.swing.BorderFactory.createLineBorder(AppTheme.RIM, 1),
+            javax.swing.BorderFactory.createEmptyBorder(42, 42, 42, 42)
     ));
+    }
+     
+     private void styleTextField(javax.swing.JTextField field) {
+    field.setBackground(AppTheme.MIDNIGHT);
+    field.setForeground(AppTheme.SNOW);
+    field.setCaretColor(AppTheme.INDIGO_LIGHT);
+    field.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+    field.setOpaque(true);
+    field.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(AppTheme.RIM, 1),
+            javax.swing.BorderFactory.createEmptyBorder(10, 14, 10, 14)
+    ));
+    field.setPreferredSize(new java.awt.Dimension(300, 42));
+    }
+     
+     private void styleButton(javax.swing.JButton button, String text, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border) {
+
+    button.setText(text);
+    button.setBackground(bg);
+    button.setForeground(fg);
+    button.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+    button.setFocusPainted(false);
+    button.setOpaque(true);
+    button.setContentAreaFilled(true);
+    button.setBorderPainted(false);
+    button.putClientProperty("JButton.buttonType", "square");
+    button.setPreferredSize(new java.awt.Dimension(300, 44));
+    button.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(border, 1),
+            javax.swing.BorderFactory.createEmptyBorder(10, 18, 10, 18)
+    ));
+    }
+     
+    private void setupLoginLogo() {
+    try {
+        java.net.URL url = getClass().getResource("/assets/logo.png");
+
+        if (url != null) {
+            javax.swing.ImageIcon icon = new javax.swing.ImageIcon(url);
+            java.awt.Image image = icon.getImage().getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
+            lblLogo.setIcon(new javax.swing.ImageIcon(image));
+            lblLogo.setText("");
+        } else {
+            lblLogo.setText("FB");
+        }
+
+    } catch (Exception e) {
+        lblLogo.setText("FB");
+    }
+
+    lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    lblLogo.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+    lblLogo.setForeground(AppTheme.SNOW);
+    lblLogo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+    lblLogo.setOpaque(false);
+    lblLogo.setBackground(new java.awt.Color(0, 0, 0, 0));
+    lblLogo.setBorder(null);
+    lblLogo.setPreferredSize(new java.awt.Dimension(170, 150));
+    }
+     
+     private void stylePasswordField(javax.swing.JPasswordField field) {
+    field.setBackground(AppTheme.MIDNIGHT);
+    field.setForeground(AppTheme.SNOW);
+    field.setCaretColor(AppTheme.INDIGO_LIGHT);
+    field.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+    field.setOpaque(true);
+    field.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(AppTheme.RIM, 1),
+            javax.swing.BorderFactory.createEmptyBorder(10, 14, 10, 14)
+    ));
+    field.setPreferredSize(new java.awt.Dimension(300, 42));
+    }
+     
+     private void rebuildLayoutLogin() {
+    getContentPane().removeAll();
+    getContentPane().setLayout(new java.awt.BorderLayout());
+
+    lblLogo = new javax.swing.JLabel();
+
+    panelBackground.removeAll();
+    panelBackground.setLayout(new java.awt.GridBagLayout());
+    panelBackground.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 30, 30, 30));
+
+    javax.swing.JPanel wrapper = new javax.swing.JPanel(new java.awt.GridLayout(1, 2, 0, 0));
+    wrapper.setPreferredSize(new java.awt.Dimension(820, 460));
+
+    javax.swing.JPanel brandPanel = new javax.swing.JPanel(new java.awt.GridBagLayout());
+    brandPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(40, 40, 40, 40));
+
+    javax.swing.JPanel logoBox = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+    logoBox.setOpaque(false);
+    logoBox.setPreferredSize(new java.awt.Dimension(190, 150));
+    logoBox.add(lblLogo);
+
+    javax.swing.JLabel lblAppName = new javax.swing.JLabel("FUTSAL BOOKING");
+    lblAppName.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 30));
+    lblAppName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+    javax.swing.JLabel lblDesc = new javax.swing.JLabel("<html><div style='text-align:center;width:260px;'>Sistem pengelolaan booking lapangan futsal, pembayaran, dan laporan.</div></html>");
+    lblDesc.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+    lblDesc.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+    java.awt.GridBagConstraints gbcBrand = new java.awt.GridBagConstraints();
+    gbcBrand.gridx = 0;
+    gbcBrand.weightx = 1.0;
+    gbcBrand.fill = java.awt.GridBagConstraints.HORIZONTAL;
+
+    gbcBrand.gridy = 0;
+    gbcBrand.fill = java.awt.GridBagConstraints.NONE;
+    gbcBrand.insets = new java.awt.Insets(0, 0, 26, 0);
+    brandPanel.add(logoBox, gbcBrand);
+    gbcBrand.fill = java.awt.GridBagConstraints.HORIZONTAL;
+
+    gbcBrand.gridy = 1;
+    gbcBrand.insets = new java.awt.Insets(0, 0, 10, 0);
+    brandPanel.add(lblAppName, gbcBrand);
+
+    gbcBrand.gridy = 2;
+    gbcBrand.insets = new java.awt.Insets(0, 0, 0, 0);
+    brandPanel.add(lblDesc, gbcBrand);
+
+    panelCard.removeAll();
+    panelCard.setLayout(new java.awt.GridBagLayout());
+    panelCard.setBorder(javax.swing.BorderFactory.createEmptyBorder(42, 42, 42, 42));
+
+    java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+    gbc.gridx = 0;
+    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gbc.weightx = 1.0;
+
+    lblBrand.setText("ADMIN PANEL");
+    lblTitle.setText("Masuk Sistem");
+    lblSubtitle.setText("Silakan masuk untuk mengelola aplikasi");
+
+    gbc.gridy = 0;
+    gbc.insets = new java.awt.Insets(0, 0, 8, 0);
+    panelCard.add(lblBrand, gbc);
+
+    gbc.gridy = 1;
+    gbc.insets = new java.awt.Insets(0, 0, 4, 0);
+    panelCard.add(lblTitle, gbc);
+
+    gbc.gridy = 2;
+    gbc.insets = new java.awt.Insets(0, 0, 28, 0);
+    panelCard.add(lblSubtitle, gbc);
+
+    lblUsername.setText("Username");
+    gbc.gridy = 3;
+    gbc.insets = new java.awt.Insets(0, 0, 6, 0);
+    panelCard.add(lblUsername, gbc);
+
+    gbc.gridy = 4;
+    gbc.insets = new java.awt.Insets(0, 0, 16, 0);
+    panelCard.add(txtUsername, gbc);
+
+    lblPassword.setText("Password");
+    gbc.gridy = 5;
+    gbc.insets = new java.awt.Insets(0, 0, 6, 0);
+    panelCard.add(lblPassword, gbc);
+
+    gbc.gridy = 6;
+    gbc.insets = new java.awt.Insets(0, 0, 10, 0);
+    panelCard.add(txtPassword, gbc);
+
+    gbc.gridy = 7;
+    gbc.insets = new java.awt.Insets(0, 0, 20, 0);
+    panelCard.add(chkShowPassword, gbc);
+
+    gbc.gridy = 8;
+    gbc.insets = new java.awt.Insets(0, 0, 12, 0);
+    panelCard.add(btnLogin, gbc);
+
+    gbc.gridy = 9;
+    gbc.insets = new java.awt.Insets(0, 0, 0, 0);
+    panelCard.add(btnCancel, gbc);
+
+    wrapper.add(brandPanel);
+    wrapper.add(panelCard);
+
+    panelBackground.add(wrapper);
+
+    getContentPane().add(panelBackground, java.awt.BorderLayout.CENTER);
+
+    getContentPane().revalidate();
+    getContentPane().repaint();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -359,7 +523,8 @@ public class Login extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-             System.setProperty("flatlaf.useNativeLibrary", "false");
+        System.setProperty("flatlaf.useNativeLibrary", "false");
+
         UIManager.put("Button.arc", 16);
         UIManager.put("Component.arc", 14);
         UIManager.put("TextComponent.arc", 14);
@@ -368,7 +533,7 @@ public class Login extends javax.swing.JFrame {
         UIManager.put("Table.showHorizontalLines", true);
         UIManager.put("Table.showVerticalLines", true);
 
-        FlatLightLaf.setup();
+        FlatDarkLaf.setup();
     } catch (Exception e) {
         System.out.println("FlatLaf gagal dimuat: " + e.getMessage());
     }

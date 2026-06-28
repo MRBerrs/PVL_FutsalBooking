@@ -457,6 +457,7 @@ public class FormBooking extends javax.swing.JFrame {
             javax.swing.BorderFactory.createLineBorder(border, 1),
             javax.swing.BorderFactory.createEmptyBorder(6, 10, 6, 10)
     ));
+    field.setPreferredSize(new java.awt.Dimension(field.getPreferredSize().width, 38));
     }
     
     private void styleComboBox(javax.swing.JComboBox<String> combo, java.awt.Color bg,
@@ -466,6 +467,7 @@ public class FormBooking extends javax.swing.JFrame {
     combo.setForeground(fg);
     combo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
     combo.setBorder(javax.swing.BorderFactory.createLineBorder(border, 1));
+    combo.setPreferredSize(new java.awt.Dimension(combo.getPreferredSize().width, 38));
     }
     
     private void styleDateChooser(com.toedter.calendar.JDateChooser chooser,
@@ -475,6 +477,7 @@ public class FormBooking extends javax.swing.JFrame {
     chooser.setForeground(fg);
     chooser.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
     chooser.setBorder(javax.swing.BorderFactory.createLineBorder(border, 1));
+    chooser.setPreferredSize(new java.awt.Dimension(chooser.getPreferredSize().width, 38));
 
     java.awt.Component editor = chooser.getDateEditor().getUiComponent();
 
@@ -508,35 +511,27 @@ public class FormBooking extends javax.swing.JFrame {
     }
     
     private void setupTableBooking() {
-    java.awt.Color bg = new java.awt.Color(17, 17, 20);
-    java.awt.Color panel = new java.awt.Color(26, 26, 31);
-    java.awt.Color border = new java.awt.Color(42, 42, 50);
-    java.awt.Color textPrimary = new java.awt.Color(232, 232, 246);
-    java.awt.Color textSecondary = new java.awt.Color(152, 152, 168);
-    java.awt.Color purple = new java.awt.Color(83, 74, 183);
-    java.awt.Color purpleLight = new java.awt.Color(175, 169, 236);
-
     tblBooking.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
     tblBooking.setFillsViewportHeight(true);
-    tblBooking.setRowHeight(28);
+    tblBooking.setRowHeight(34);
     tblBooking.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-    tblBooking.setBackground(bg);
-    tblBooking.setForeground(textSecondary);
-    tblBooking.setGridColor(border);
+    tblBooking.setBackground(AppTheme.ABYSS);
+    tblBooking.setForeground(AppTheme.SLATE);
+    tblBooking.setGridColor(AppTheme.RIM);
     tblBooking.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
-    tblBooking.setSelectionBackground(purple);
-    tblBooking.setSelectionForeground(textPrimary);
+    tblBooking.setSelectionBackground(AppTheme.INDIGO_GHOST);
+    tblBooking.setSelectionForeground(AppTheme.SNOW);
     tblBooking.setShowVerticalLines(false);
     tblBooking.setShowHorizontalLines(true);
 
-    tblBooking.getTableHeader().setBackground(panel);
-    tblBooking.getTableHeader().setForeground(purpleLight);
+    tblBooking.getTableHeader().setBackground(AppTheme.COURT);
+    tblBooking.getTableHeader().setForeground(AppTheme.INDIGO_LIGHT);
     tblBooking.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
 
-    jScrollPane1.getViewport().setBackground(bg);
-    jScrollPane1.setBackground(bg);
-    jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(border, 1));
+    jScrollPane1.getViewport().setBackground(AppTheme.ABYSS);
+    jScrollPane1.setBackground(AppTheme.ABYSS);
+    jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(AppTheme.RIM, 1));
 
     jScrollPane1.setVerticalScrollBarPolicy(
             javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
@@ -548,32 +543,18 @@ public class FormBooking extends javax.swing.JFrame {
     }
     
     private void styleFormBookingModernPurple() {
-    java.awt.Color bg = new java.awt.Color(17, 17, 20);
-    java.awt.Color input = new java.awt.Color(12, 12, 16);
-    java.awt.Color border = new java.awt.Color(42, 42, 50);
-
-    java.awt.Color textPrimary = new java.awt.Color(232, 232, 246);
-    java.awt.Color textSecondary = new java.awt.Color(152, 152, 168);
-    java.awt.Color purple = new java.awt.Color(83, 74, 183);
-    java.awt.Color purpleLight = new java.awt.Color(175, 169, 236);
-
-    java.awt.Color success = new java.awt.Color(15, 62, 36);
-    java.awt.Color editBlue = new java.awt.Color(48, 99, 225);
-    java.awt.Color danger = new java.awt.Color(135, 34, 48);
-    java.awt.Color neutral = new java.awt.Color(48, 48, 58);
-
-    getContentPane().setBackground(bg);
-    jPanel3.setBackground(bg);
+    getContentPane().setBackground(AppTheme.ABYSS);
+    jPanel3.setBackground(AppTheme.ABYSS);
     jPanel3.setOpaque(true);
 
     jLabel5.setText("DATA BOOKING");
-    jLabel5.setForeground(textPrimary);
+    jLabel5.setForeground(AppTheme.SNOW);
     jLabel5.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 34));
 
-    jLabel12.setForeground(purpleLight);
+    jLabel12.setForeground(AppTheme.INDIGO_LIGHT);
     jLabel12.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
 
-    jLabel13.setForeground(purpleLight);
+    jLabel13.setForeground(AppTheme.INDIGO_LIGHT);
     jLabel13.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
 
     javax.swing.JLabel[] labels = {
@@ -582,30 +563,30 @@ public class FormBooking extends javax.swing.JFrame {
     };
 
     for (javax.swing.JLabel label : labels) {
-        label.setForeground(textSecondary);
+        label.setForeground(AppTheme.SLATE);
         label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
     }
 
-    styleTextField(txtCari, input, textPrimary, border, purpleLight);
-    styleTextField(txtKodeBooking, input, textPrimary, border, purpleLight);
-    styleTextField(txtCatatan, input, textPrimary, border, purpleLight);
-    styleTextField(txtTotalHarga, input, textPrimary, border, purpleLight);
+    styleTextField(txtCari, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtKodeBooking, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtCatatan, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtTotalHarga, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
 
-    styleComboBox(cmbMember, input, textPrimary, border);
-    styleComboBox(cmbLapangan, input, textPrimary, border);
-    styleComboBox(cmbJadwal, input, textPrimary, border);
-    styleComboBox(cmbJumlahJam, input, textPrimary, border);
-    styleComboBox(cmbStatusBooking, input, textPrimary, border);
-    styleComboBox(cmbSumberBooking, input, textPrimary, border);
+    styleComboBox(cmbMember, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbLapangan, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbJadwal, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbJumlahJam, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbStatusBooking, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbSumberBooking, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
 
-    styleDateChooser(dcTanggalMain, input, textPrimary, border, purpleLight);
+    styleDateChooser(dcTanggalMain, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
 
-    styleButton(btnCari, "Cari", purple, textPrimary, border);
-    styleButton(btnSimpan, "Simpan", success, textPrimary, border);
-    styleButton(btnEdit, "Edit", editBlue, java.awt.Color.WHITE, border);
-    styleButton(btnHapus, "Batalkan", danger, java.awt.Color.WHITE, border);
-    styleButton(btnClear, "Bersihkan", neutral, textPrimary, border);
-    styleButton(btnKeluar, "Keluar", neutral, textSecondary, border);
+    styleButton(btnCari, "Cari", AppTheme.INDIGO, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnSimpan, "Simpan", AppTheme.EMERALD_TINT, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnEdit, "Edit", AppTheme.INDIGO_DEEP, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnHapus, "Batalkan", AppTheme.CORAL_TINT, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnClear, "Bersihkan", AppTheme.ELEVATED, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnKeluar, "Keluar", AppTheme.ELEVATED, AppTheme.SLATE, AppTheme.RIM);
 
     setupTableBooking();
     }
