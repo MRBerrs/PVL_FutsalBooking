@@ -25,10 +25,17 @@ public class FormPembayaran extends javax.swing.JFrame {
      * Creates new form FormPembayaran
      */
     public FormPembayaran() {
-        initComponents();
-        setLocationRelativeTo(null);
+         initComponents();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1200, 720));
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        setResizable(true);
+        rebuildLayoutPembayaranLikeBooking();
+        styleFormPembayaran();
         loadBooking();
         datatable();
+        setupTablePembayaran();
         kosong();
         aktif();
     }
@@ -223,10 +230,286 @@ public class FormPembayaran extends javax.swing.JFrame {
 
         rs.close();
         st.close();
-
+        
+        setupTablePembayaran();
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Gagal menampilkan data pembayaran: " + e.getMessage());
     }
+    }
+    
+    private void rebuildLayoutPembayaranLikeBooking() {
+    getContentPane().removeAll();
+    getContentPane().setLayout(new java.awt.BorderLayout());
+
+    jPanel3.removeAll();
+    jPanel3.setLayout(new java.awt.BorderLayout(0, 18));
+    jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(28, 28, 28, 8));
+
+    javax.swing.JPanel headerPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+    headerPanel.setOpaque(false);
+    headerPanel.add(jLabel5, java.awt.BorderLayout.WEST);
+
+    javax.swing.JPanel contentPanel = new javax.swing.JPanel(new java.awt.BorderLayout(8, 0));
+    contentPanel.setOpaque(false);
+
+    javax.swing.JPanel leftPanel = new javax.swing.JPanel(new java.awt.BorderLayout(0, 22));
+    leftPanel.setOpaque(false);
+
+    javax.swing.JPanel searchPanel = new javax.swing.JPanel(new java.awt.BorderLayout(8, 8));
+    searchPanel.setOpaque(false);
+
+    javax.swing.JPanel searchInputPanel = new javax.swing.JPanel(new java.awt.BorderLayout(8, 0));
+    searchInputPanel.setOpaque(false);
+    searchInputPanel.add(txtCari, java.awt.BorderLayout.CENTER);
+    searchInputPanel.add(btnCari, java.awt.BorderLayout.EAST);
+
+    jLabel13.setText("PENCARIAN");
+
+    searchPanel.add(jLabel13, java.awt.BorderLayout.NORTH);
+    searchPanel.add(searchInputPanel, java.awt.BorderLayout.CENTER);
+
+    javax.swing.JPanel formPanel = new javax.swing.JPanel(new java.awt.GridBagLayout());
+    formPanel.setOpaque(false);
+
+    java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+    gbc.insets = new java.awt.Insets(6, 0, 6, 18);
+    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gbc.weightx = 1.0;
+
+    jLabel12.setText("INPUT DATA");
+
+    addTitlePembayaran(formPanel, gbc, 0, jLabel12);
+
+    jLabel6.setText("Kode Pembayaran");
+    jLabel7.setText("Booking");
+    addPairPembayaran(formPanel, gbc, 1, jLabel6, txtKodePembayaran, jLabel7, cmbBooking);
+
+    jLabel11.setText("Nama Member");
+    jLabel8.setText("Nama Lapangan");
+    addPairPembayaran(formPanel, gbc, 3, jLabel11, txtNamaMember, jLabel8, txtNamaLapangan);
+
+    jLabel9.setText("Total Tagihan");
+    jLabel14.setText("Jumlah Bayar");
+    addPairPembayaran(formPanel, gbc, 5, jLabel9, txtTotalTagihan, jLabel14, txtJumlahBayar);
+
+    jLabel15.setText("Metode Bayar");
+    jLabel16.setText("Status Bayar");
+    addPairPembayaran(formPanel, gbc, 7, jLabel15, cmbMetodeBayar, jLabel16, cmbStatusBayar);
+
+    jLabel10.setText("Keterangan");
+    addFullFieldPembayaran(formPanel, gbc, 9, jLabel10, txtKeterangan);
+
+    javax.swing.JPanel buttonPanel = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 14, 0));
+    buttonPanel.setOpaque(false);
+    buttonPanel.add(btnSimpan);
+    buttonPanel.add(btnEdit);
+    buttonPanel.add(btnHapus);
+    buttonPanel.add(btnClear);
+    buttonPanel.add(btnKeluar);
+
+    gbc.gridx = 0;
+    gbc.gridy = 11;
+    gbc.gridwidth = 4;
+    gbc.insets = new java.awt.Insets(18, 0, 0, 18);
+    formPanel.add(buttonPanel, gbc);
+
+    leftPanel.add(searchPanel, java.awt.BorderLayout.NORTH);
+    leftPanel.add(formPanel, java.awt.BorderLayout.CENTER);
+
+    javax.swing.JPanel tablePanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+    tablePanel.setOpaque(false);
+    tablePanel.setPreferredSize(new java.awt.Dimension(620, 10));
+    tablePanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+    contentPanel.add(leftPanel, java.awt.BorderLayout.CENTER);
+    contentPanel.add(tablePanel, java.awt.BorderLayout.EAST);
+
+    jPanel3.add(headerPanel, java.awt.BorderLayout.NORTH);
+    jPanel3.add(contentPanel, java.awt.BorderLayout.CENTER);
+
+    getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
+
+    getContentPane().revalidate();
+    getContentPane().repaint();
+    }
+    
+    private void addTitlePembayaran(javax.swing.JPanel panel, java.awt.GridBagConstraints gbc, int row, java.awt.Component component) {
+    gbc.gridx = 0;
+    gbc.gridy = row;
+    gbc.gridwidth = 4;
+    gbc.weightx = 1.0;
+    gbc.insets = new java.awt.Insets(0, 0, 10, 18);
+    panel.add(component, gbc);
+    }
+    
+    private void addPairPembayaran(javax.swing.JPanel panel, java.awt.GridBagConstraints gbc, int row,
+        javax.swing.JLabel label1, java.awt.Component component1,
+        javax.swing.JLabel label2, java.awt.Component component2) {
+
+    gbc.gridwidth = 1;
+    gbc.insets = new java.awt.Insets(6, 0, 4, 18);
+
+    gbc.gridx = 0;
+    gbc.gridy = row;
+    gbc.weightx = 1.0;
+    panel.add(label1, gbc);
+
+    gbc.gridx = 2;
+    gbc.gridy = row;
+    gbc.weightx = 1.0;
+    panel.add(label2, gbc);
+
+    gbc.insets = new java.awt.Insets(0, 0, 12, 18);
+
+    gbc.gridx = 0;
+    gbc.gridy = row + 1;
+    gbc.weightx = 1.0;
+    panel.add(component1, gbc);
+
+    gbc.gridx = 2;
+    gbc.gridy = row + 1;
+    gbc.weightx = 1.0;
+    panel.add(component2, gbc);
+    }
+    
+    private void addFullFieldPembayaran(javax.swing.JPanel panel, java.awt.GridBagConstraints gbc, int row,
+        javax.swing.JLabel label, java.awt.Component component) {
+
+    gbc.gridwidth = 4;
+    gbc.insets = new java.awt.Insets(6, 0, 4, 18);
+    gbc.gridx = 0;
+    gbc.gridy = row;
+    gbc.weightx = 1.0;
+    panel.add(label, gbc);
+
+    gbc.insets = new java.awt.Insets(0, 0, 12, 18);
+    gbc.gridx = 0;
+    gbc.gridy = row + 1;
+    gbc.weightx = 1.0;
+    panel.add(component, gbc);
+    }
+    
+    private void styleFormPembayaran() {
+    getContentPane().setBackground(AppTheme.ABYSS);
+    jPanel3.setBackground(AppTheme.ABYSS);
+    jPanel3.setOpaque(true);
+
+    jLabel5.setText("DATA PEMBAYARAN");
+    jLabel5.setForeground(AppTheme.SNOW);
+    jLabel5.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 34));
+
+    jLabel13.setForeground(AppTheme.INDIGO_LIGHT);
+    jLabel13.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
+
+    jLabel12.setForeground(AppTheme.INDIGO_LIGHT);
+    jLabel12.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+
+    javax.swing.JLabel[] labels = {
+        jLabel6, jLabel7, jLabel8, jLabel9, jLabel10, jLabel11,
+        jLabel14, jLabel15, jLabel16
+    };
+
+    for (javax.swing.JLabel label : labels) {
+        label.setForeground(AppTheme.SLATE);
+        label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+    }
+
+    styleTextField(txtCari, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtKodePembayaran, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtNamaMember, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtNamaLapangan, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtTotalTagihan, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtJumlahBayar, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtKeterangan, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+
+    styleComboBox(cmbBooking, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbMetodeBayar, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbStatusBayar, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+
+    styleButton(btnCari, "Cari", AppTheme.INDIGO, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnSimpan, "Simpan", AppTheme.EMERALD_TINT, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnEdit, "Edit", AppTheme.INDIGO_DEEP, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnHapus, "Hapus", AppTheme.CORAL_TINT, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnClear, "Bersihkan", AppTheme.ELEVATED, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnKeluar, "Keluar", AppTheme.ELEVATED, AppTheme.SLATE, AppTheme.RIM);
+
+    setupTablePembayaran();
+    }
+    
+    private void styleTextField(javax.swing.JTextField field, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border, java.awt.Color caret) {
+
+    field.setBackground(bg);
+    field.setForeground(fg);
+    field.setCaretColor(caret);
+    field.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    field.setOpaque(true);
+    field.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(border, 1),
+            javax.swing.BorderFactory.createEmptyBorder(6, 10, 6, 10)
+    ));
+    field.setPreferredSize(new java.awt.Dimension(field.getPreferredSize().width, 38));
+    }
+    
+    private void styleComboBox(javax.swing.JComboBox<String> combo, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border) {
+
+    combo.setBackground(bg);
+    combo.setForeground(fg);
+    combo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    combo.setBorder(javax.swing.BorderFactory.createLineBorder(border, 1));
+    combo.setPreferredSize(new java.awt.Dimension(combo.getPreferredSize().width, 38));
+    }
+    
+    private void styleButton(javax.swing.JButton button, String text, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border) {
+
+    button.setText(text);
+    button.setBackground(bg);
+    button.setForeground(fg);
+    button.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+    button.setFocusPainted(false);
+    button.setOpaque(true);
+    button.setContentAreaFilled(true);
+    button.setBorderPainted(false);
+    button.putClientProperty("JButton.buttonType", "square");
+    button.setPreferredSize(new java.awt.Dimension(104, 42));
+    button.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(border, 1),
+            javax.swing.BorderFactory.createEmptyBorder(8, 14, 8, 14)
+    ));
+    }
+    
+    private void setupTablePembayaran() {
+    tblPembayaran.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+    tblPembayaran.setFillsViewportHeight(true);
+    tblPembayaran.setRowHeight(34);
+    tblPembayaran.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+    tblPembayaran.setBackground(AppTheme.ABYSS);
+    tblPembayaran.setForeground(AppTheme.SLATE);
+    tblPembayaran.setGridColor(AppTheme.RIM);
+    tblPembayaran.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    tblPembayaran.setSelectionBackground(AppTheme.INDIGO_GHOST);
+    tblPembayaran.setSelectionForeground(AppTheme.SNOW);
+    tblPembayaran.setShowVerticalLines(false);
+    tblPembayaran.setShowHorizontalLines(true);
+
+    tblPembayaran.getTableHeader().setBackground(AppTheme.COURT);
+    tblPembayaran.getTableHeader().setForeground(AppTheme.INDIGO_LIGHT);
+    tblPembayaran.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+
+    jScrollPane1.getViewport().setBackground(AppTheme.ABYSS);
+    jScrollPane1.setBackground(AppTheme.ABYSS);
+    jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(AppTheme.RIM, 1));
+
+    jScrollPane1.setVerticalScrollBarPolicy(
+            javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
+    );
+
+    jScrollPane1.setHorizontalScrollBarPolicy(
+            javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+    );
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -565,6 +848,7 @@ public class FormPembayaran extends javax.swing.JFrame {
         rs.close();
         pst.close();
 
+        setupTablePembayaran();
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Gagal mencari pembayaran: " + e.getMessage());
     }
@@ -785,15 +1069,20 @@ public class FormPembayaran extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        System.setProperty("flatlaf.useNativeLibrary", "false");
+
+        javax.swing.UIManager.put("Button.arc", 16);
+        javax.swing.UIManager.put("Component.arc", 14);
+        javax.swing.UIManager.put("TextComponent.arc", 14);
+        javax.swing.UIManager.put("ScrollBar.width", 12);
+        javax.swing.UIManager.put("Table.rowHeight", 30);
+        javax.swing.UIManager.put("Table.showHorizontalLines", true);
+        javax.swing.UIManager.put("Table.showVerticalLines", true);
+
+        com.formdev.flatlaf.FlatDarkLaf.setup();
+    } catch (Exception e) {
+        System.out.println("FlatLaf gagal dimuat: " + e.getMessage());
+    }
         //</editor-fold>
 
         /* Create and display the form */

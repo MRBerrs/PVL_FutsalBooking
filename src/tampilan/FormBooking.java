@@ -25,20 +25,29 @@ public class FormBooking extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FormBooking.class.getName());
     private Map<String, Double> hargaLapangan = new HashMap<>();
-
+    private javax.swing.JComboBox<String> cmbSumberBooking;
+    private javax.swing.JLabel lblSumberBooking;
+    
     /**
      * Creates new form FormBooking
      */
     public FormBooking() {
         initComponents();
-        setLocationRelativeTo(null);
-        loadMember();
-        loadLapangan();
-        loadJadwal();
 
-        datatable();
-        kosong();
-        aktif();
+    setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    setMinimumSize(new java.awt.Dimension(1200, 720));
+    setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+    setResizable(true);
+    setupSumberBooking();
+    rebuildLayoutBookingLikeMember();
+    styleFormBookingModernPurple();
+    loadMember();
+    loadLapangan();
+    loadJadwal();
+    datatable();
+    setupTableBooking();
+    kosong();
+    aktif();
     }
     
     private void aktif() {
@@ -68,6 +77,7 @@ public class FormBooking extends javax.swing.JFrame {
     }
 
     cmbStatusBooking.setSelectedItem("pending");
+    cmbSumberBooking.setSelectedItem("Manual");
 
     autoKodeBooking();
     hitungTotal();
@@ -247,6 +257,7 @@ public class FormBooking extends javax.swing.JFrame {
     tbl.addColumn("Jumlah Jam");
     tbl.addColumn("Total Harga");
     tbl.addColumn("Status");
+    tbl.addColumn("Sumber");
 
     tblBooking.setModel(tbl);
 
@@ -255,7 +266,7 @@ public class FormBooking extends javax.swing.JFrame {
 
         String sql = "SELECT b.kode_booking, b.tanggal_main, m.nama_lengkap AS member, "
                    + "l.nama_lapangan AS lapangan, j.label AS jadwal, "
-                   + "b.jumlah_jam, b.total_harga, b.status_booking "
+                   + "b.jumlah_jam, b.total_harga, b.status_booking, b.sumber_booking "
                    + "FROM booking b "
                    + "JOIN members m ON b.id_member = m.id_member "
                    + "JOIN lapangan l ON b.id_lapangan = l.id_lapangan "
@@ -274,16 +285,310 @@ public class FormBooking extends javax.swing.JFrame {
                 rs.getString("jadwal"),
                 rs.getString("jumlah_jam"),
                 rs.getString("total_harga"),
-                rs.getString("status_booking")
+                rs.getString("status_booking"),
+                rs.getString("sumber_booking")
             });
         }
 
         rs.close();
         st.close();
 
+        setupTableBooking();
+
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Gagal menampilkan data booking: " + e.getMessage());
     }
+    }
+    
+    private void setupSumberBooking() {
+    cmbSumberBooking = new javax.swing.JComboBox<>();
+    cmbSumberBooking.addItem("Online");
+    cmbSumberBooking.addItem("Manual");
+    cmbSumberBooking.addItem("WhatsApp");
+
+    lblSumberBooking = new javax.swing.JLabel("Sumber Booking");
+    }
+    
+    private void rebuildLayoutBookingLikeMember() {
+    getContentPane().removeAll();
+    getContentPane().setLayout(new java.awt.BorderLayout());
+
+    jPanel3.removeAll();
+    jPanel3.setLayout(new java.awt.BorderLayout(0, 18));
+    jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(28, 28, 28, 8));
+
+    javax.swing.JPanel headerPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+    headerPanel.setOpaque(false);
+    headerPanel.add(jLabel5, java.awt.BorderLayout.WEST);
+
+    javax.swing.JPanel contentPanel = new javax.swing.JPanel(new java.awt.BorderLayout(8, 0));
+    contentPanel.setOpaque(false);
+
+    javax.swing.JPanel leftPanel = new javax.swing.JPanel(new java.awt.BorderLayout(0, 22));
+    leftPanel.setOpaque(false);
+
+    javax.swing.JPanel searchPanel = new javax.swing.JPanel(new java.awt.BorderLayout(8, 8));
+    searchPanel.setOpaque(false);
+
+    javax.swing.JPanel searchInputPanel = new javax.swing.JPanel(new java.awt.BorderLayout(8, 0));
+    searchInputPanel.setOpaque(false);
+    searchInputPanel.add(txtCari, java.awt.BorderLayout.CENTER);
+    searchInputPanel.add(btnCari, java.awt.BorderLayout.EAST);
+
+    jLabel13.setText("PENCARIAN");
+
+    searchPanel.add(jLabel13, java.awt.BorderLayout.NORTH);
+    searchPanel.add(searchInputPanel, java.awt.BorderLayout.CENTER);
+
+    javax.swing.JPanel formPanel = new javax.swing.JPanel(new java.awt.GridBagLayout());
+    formPanel.setOpaque(false);
+
+    java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+    gbc.insets = new java.awt.Insets(6, 0, 6, 14);
+    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gbc.weightx = 1.0;
+
+    jLabel12.setText("INPUT DATA");
+
+    addTitle(formPanel, gbc, 0, jLabel12);
+
+    jLabel6.setText("Kode Booking");
+    jLabel7.setText("Status Booking");
+    addPair(formPanel, gbc, 1, jLabel6, txtKodeBooking, jLabel7, cmbStatusBooking);
+
+    jLabel11.setText("Member");
+    lblSumberBooking.setText("Sumber Booking");
+    addPair(formPanel, gbc, 3, jLabel11, cmbMember, lblSumberBooking, cmbSumberBooking);
+
+    jLabel8.setText("Lapangan");
+    jLabel9.setText("Jadwal");
+    addPair(formPanel, gbc, 5, jLabel8, cmbLapangan, jLabel9, cmbJadwal);
+
+    jLabel14.setText("Tanggal Main");
+    jLabel15.setText("Jumlah Jam");
+    addPair(formPanel, gbc, 7, jLabel14, dcTanggalMain, jLabel15, cmbJumlahJam);
+
+    jLabel16.setText("Total Harga");
+    jLabel10.setText("Catatan");
+    addPair(formPanel, gbc, 9, jLabel16, txtTotalHarga, jLabel10, txtCatatan);
+
+    javax.swing.JPanel buttonPanel = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 14, 0));
+    buttonPanel.setOpaque(false);
+    buttonPanel.add(btnSimpan);
+    buttonPanel.add(btnEdit);
+    buttonPanel.add(btnHapus);
+    buttonPanel.add(btnClear);
+    buttonPanel.add(btnKeluar);
+
+    gbc.gridx = 0;
+    gbc.gridy = 11;
+    gbc.gridwidth = 4;
+    gbc.insets = new java.awt.Insets(18, 0, 0, 14);
+    formPanel.add(buttonPanel, gbc);
+
+    leftPanel.add(searchPanel, java.awt.BorderLayout.NORTH);
+    leftPanel.add(formPanel, java.awt.BorderLayout.CENTER);
+
+    javax.swing.JPanel tablePanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+    tablePanel.setOpaque(false);
+    tablePanel.setPreferredSize(new java.awt.Dimension(520, 10));
+    tablePanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+    contentPanel.add(leftPanel, java.awt.BorderLayout.CENTER);
+    contentPanel.add(tablePanel, java.awt.BorderLayout.EAST);
+
+    jPanel3.add(headerPanel, java.awt.BorderLayout.NORTH);
+    jPanel3.add(contentPanel, java.awt.BorderLayout.CENTER);
+
+    getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
+
+    getContentPane().revalidate();
+    getContentPane().repaint();
+    }
+    
+    private void addTitle(javax.swing.JPanel panel, java.awt.GridBagConstraints gbc, int row, java.awt.Component component) {
+    gbc.gridx = 0;
+    gbc.gridy = row;
+    gbc.gridwidth = 4;
+    gbc.weightx = 1.0;
+    gbc.insets = new java.awt.Insets(0, 0, 10, 14);
+    panel.add(component, gbc);
+    }
+    
+    private void addPair(javax.swing.JPanel panel, java.awt.GridBagConstraints gbc, int row,
+        javax.swing.JLabel label1, java.awt.Component component1,
+        javax.swing.JLabel label2, java.awt.Component component2) {
+
+    gbc.gridwidth = 1;
+    gbc.insets = new java.awt.Insets(6, 0, 4, 14);
+
+    gbc.gridx = 0;
+    gbc.gridy = row;
+    gbc.weightx = 1.0;
+    panel.add(label1, gbc);
+
+    gbc.gridx = 2;
+    gbc.gridy = row;
+    gbc.weightx = 1.0;
+    panel.add(label2, gbc);
+
+    gbc.insets = new java.awt.Insets(0, 0, 12, 14);
+
+    gbc.gridx = 0;
+    gbc.gridy = row + 1;
+    gbc.weightx = 1.0;
+    panel.add(component1, gbc);
+
+    gbc.gridx = 2;
+    gbc.gridy = row + 1;
+    gbc.weightx = 1.0;
+    panel.add(component2, gbc);
+    }
+    
+    private void styleTextField(javax.swing.JTextField field, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border, java.awt.Color caret) {
+
+    field.setBackground(bg);
+    field.setForeground(fg);
+    field.setCaretColor(caret);
+    field.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    field.setOpaque(true);
+    field.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(border, 1),
+            javax.swing.BorderFactory.createEmptyBorder(6, 10, 6, 10)
+    ));
+    field.setPreferredSize(new java.awt.Dimension(field.getPreferredSize().width, 38));
+    }
+    
+    private void styleComboBox(javax.swing.JComboBox<String> combo, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border) {
+
+    combo.setBackground(bg);
+    combo.setForeground(fg);
+    combo.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    combo.setBorder(javax.swing.BorderFactory.createLineBorder(border, 1));
+    combo.setPreferredSize(new java.awt.Dimension(combo.getPreferredSize().width, 38));
+    }
+    
+    private void styleDateChooser(com.toedter.calendar.JDateChooser chooser,
+        java.awt.Color bg, java.awt.Color fg, java.awt.Color border, java.awt.Color caret) {
+
+    chooser.setBackground(bg);
+    chooser.setForeground(fg);
+    chooser.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    chooser.setBorder(javax.swing.BorderFactory.createLineBorder(border, 1));
+    chooser.setPreferredSize(new java.awt.Dimension(chooser.getPreferredSize().width, 38));
+
+    java.awt.Component editor = chooser.getDateEditor().getUiComponent();
+
+    if (editor instanceof javax.swing.JTextField) {
+        javax.swing.JTextField textField = (javax.swing.JTextField) editor;
+        textField.setBackground(bg);
+        textField.setForeground(fg);
+        textField.setCaretColor(caret);
+        textField.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+        textField.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 10, 6, 10));
+    }
+    }
+    
+    private void styleButton(javax.swing.JButton button, String text, java.awt.Color bg,
+        java.awt.Color fg, java.awt.Color border) {
+
+    button.setText(text);
+    button.setBackground(bg);
+    button.setForeground(fg);
+    button.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+    button.setFocusPainted(false);
+    button.setOpaque(true);
+    button.setContentAreaFilled(true);
+    button.setBorderPainted(false);
+    button.putClientProperty("JButton.buttonType", "square");
+    button.setPreferredSize(new java.awt.Dimension(104, 42));
+    button.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(border, 1),
+            javax.swing.BorderFactory.createEmptyBorder(8, 14, 8, 14)
+    ));
+    }
+    
+    private void setupTableBooking() {
+    tblBooking.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+    tblBooking.setFillsViewportHeight(true);
+    tblBooking.setRowHeight(34);
+    tblBooking.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+    tblBooking.setBackground(AppTheme.ABYSS);
+    tblBooking.setForeground(AppTheme.SLATE);
+    tblBooking.setGridColor(AppTheme.RIM);
+    tblBooking.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
+    tblBooking.setSelectionBackground(AppTheme.INDIGO_GHOST);
+    tblBooking.setSelectionForeground(AppTheme.SNOW);
+    tblBooking.setShowVerticalLines(false);
+    tblBooking.setShowHorizontalLines(true);
+
+    tblBooking.getTableHeader().setBackground(AppTheme.COURT);
+    tblBooking.getTableHeader().setForeground(AppTheme.INDIGO_LIGHT);
+    tblBooking.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+
+    jScrollPane1.getViewport().setBackground(AppTheme.ABYSS);
+    jScrollPane1.setBackground(AppTheme.ABYSS);
+    jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(AppTheme.RIM, 1));
+
+    jScrollPane1.setVerticalScrollBarPolicy(
+            javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
+    );
+
+    jScrollPane1.setHorizontalScrollBarPolicy(
+            javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+    );
+    }
+    
+    private void styleFormBookingModernPurple() {
+    getContentPane().setBackground(AppTheme.ABYSS);
+    jPanel3.setBackground(AppTheme.ABYSS);
+    jPanel3.setOpaque(true);
+
+    jLabel5.setText("DATA BOOKING");
+    jLabel5.setForeground(AppTheme.SNOW);
+    jLabel5.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 34));
+
+    jLabel12.setForeground(AppTheme.INDIGO_LIGHT);
+    jLabel12.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24));
+
+    jLabel13.setForeground(AppTheme.INDIGO_LIGHT);
+    jLabel13.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
+
+    javax.swing.JLabel[] labels = {
+        jLabel6, jLabel7, jLabel8, jLabel9, jLabel10, jLabel11,
+        jLabel14, jLabel15, jLabel16, lblSumberBooking
+    };
+
+    for (javax.swing.JLabel label : labels) {
+        label.setForeground(AppTheme.SLATE);
+        label.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+    }
+
+    styleTextField(txtCari, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtKodeBooking, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtCatatan, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+    styleTextField(txtTotalHarga, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+
+    styleComboBox(cmbMember, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbLapangan, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbJadwal, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbJumlahJam, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbStatusBooking, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+    styleComboBox(cmbSumberBooking, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM);
+
+    styleDateChooser(dcTanggalMain, AppTheme.MIDNIGHT, AppTheme.SNOW, AppTheme.RIM, AppTheme.INDIGO_LIGHT);
+
+    styleButton(btnCari, "Cari", AppTheme.INDIGO, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnSimpan, "Simpan", AppTheme.EMERALD_TINT, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnEdit, "Edit", AppTheme.INDIGO_DEEP, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnHapus, "Batalkan", AppTheme.CORAL_TINT, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnClear, "Bersihkan", AppTheme.ELEVATED, AppTheme.SNOW, AppTheme.RIM);
+    styleButton(btnKeluar, "Keluar", AppTheme.ELEVATED, AppTheme.SLATE, AppTheme.RIM);
+
+    setupTableBooking();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -426,64 +731,60 @@ public class FormBooking extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtCatatan)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(txtCari)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtKodeBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5)
-                            .addComponent(cmbMember, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel8)
-                            .addComponent(cmbStatusBooking, 0, 200, Short.MAX_VALUE)
-                            .addComponent(cmbLapangan, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(207, 207, 207)
-                                .addComponent(jLabel14))
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel12)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addGap(168, 168, 168)
                                 .addComponent(jLabel7))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(250, 250, 250)
+                                .addComponent(cmbStatusBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtKodeBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addComponent(cmbMember, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel11)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(cmbJumlahJam, javax.swing.GroupLayout.Alignment.LEADING, 0, 200, Short.MAX_VALUE)
+                                        .addComponent(cmbJadwal, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel15))
+                                .addGap(50, 50, 50)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel16)
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(cmbLapangan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel14)
+                                        .addComponent(jLabel8)
+                                        .addComponent(dcTanggalMain, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                        .addComponent(txtTotalHarga))))
                             .addComponent(jLabel10)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel12)
+                            .addComponent(txtCatatan, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(18, 18, 18)
                                 .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 2, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbJumlahJam, javax.swing.GroupLayout.Alignment.LEADING, 0, 200, Short.MAX_VALUE)
-                            .addComponent(cmbJadwal, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(dcTanggalMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addGap(131, 131, 131))
-                            .addComponent(txtTotalHarga))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel5)
                 .addGap(27, 27, 27)
                 .addComponent(jLabel13)
@@ -491,15 +792,15 @@ public class FormBooking extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCari))
-                .addGap(53, 53, 53)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
+                .addGap(5, 5, 5)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7))
-                        .addGap(5, 5, 5)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtKodeBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbStatusBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -511,48 +812,46 @@ public class FormBooking extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cmbMember, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbLapangan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
                             .addComponent(jLabel14))
                         .addGap(8, 8, 8)
-                        .addComponent(cmbJadwal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(dcTanggalMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel15)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbJadwal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dcTanggalMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbJumlahJam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel16)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel16))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtCatatan, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSimpan)
-                    .addComponent(btnEdit)
-                    .addComponent(btnHapus)
-                    .addComponent(btnClear)
-                    .addComponent(btnKeluar))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbJumlahJam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTotalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCatatan, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnSimpan)
+                            .addComponent(btnEdit)
+                            .addComponent(btnHapus)
+                            .addComponent(btnClear)
+                            .addComponent(btnKeluar)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(742, 742, 742))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 691, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 968, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -581,6 +880,7 @@ public class FormBooking extends javax.swing.JFrame {
     tbl.addColumn("Jumlah Jam");
     tbl.addColumn("Total Harga");
     tbl.addColumn("Status");
+    tbl.addColumn("Sumber");
 
     tblBooking.setModel(tbl);
 
@@ -589,7 +889,7 @@ public class FormBooking extends javax.swing.JFrame {
 
         String sql = "SELECT b.kode_booking, b.tanggal_main, m.nama_lengkap AS member, "
                    + "l.nama_lapangan AS lapangan, j.label AS jadwal, "
-                   + "b.jumlah_jam, b.total_harga, b.status_booking "
+                   + "b.jumlah_jam, b.total_harga, b.status_booking, b.sumber_booking "
                    + "FROM booking b "
                    + "JOIN members m ON b.id_member = m.id_member "
                    + "JOIN lapangan l ON b.id_lapangan = l.id_lapangan "
@@ -598,6 +898,7 @@ public class FormBooking extends javax.swing.JFrame {
                    + "OR m.nama_lengkap LIKE ? "
                    + "OR l.nama_lapangan LIKE ? "
                    + "OR b.status_booking LIKE ? "
+                   + "OR b.sumber_booking LIKE ? "
                    + "ORDER BY b.id_booking DESC";
 
         PreparedStatement pst = conn.prepareStatement(sql);
@@ -607,6 +908,7 @@ public class FormBooking extends javax.swing.JFrame {
         pst.setString(2, cari);
         pst.setString(3, cari);
         pst.setString(4, cari);
+        pst.setString(5, cari);
 
         ResultSet rs = pst.executeQuery();
 
@@ -619,12 +921,15 @@ public class FormBooking extends javax.swing.JFrame {
                 rs.getString("jadwal"),
                 rs.getString("jumlah_jam"),
                 rs.getString("total_harga"),
-                rs.getString("status_booking")
+                rs.getString("status_booking"),
+                rs.getString("sumber_booking")
             });
         }
 
         rs.close();
         pst.close();
+
+        setupTableBooking();
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Gagal mencari booking: " + e.getMessage());
@@ -659,10 +964,10 @@ public class FormBooking extends javax.swing.JFrame {
 
         Connection conn = koneksi.configDB();
 
-        String sql = "INSERT INTO booking "
-                   + "(kode_booking, id_member, id_lapangan, id_jadwal, id_user, tanggal_main, "
-                   + "jumlah_jam, total_harga, catatan, status_booking) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO booking "
+                + "(kode_booking, id_member, id_lapangan, id_jadwal, id_user, tanggal_main, "
+                + "jumlah_jam, total_harga, catatan, status_booking, sumber_booking) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement pst = conn.prepareStatement(sql);
         pst.setString(1, txtKodeBooking.getText());
@@ -675,6 +980,7 @@ public class FormBooking extends javax.swing.JFrame {
         pst.setDouble(8, totalHarga);
         pst.setString(9, txtCatatan.getText().trim());
         pst.setString(10, cmbStatusBooking.getSelectedItem().toString());
+        pst.setString(11, cmbSumberBooking.getSelectedItem().toString());
 
         pst.executeUpdate();
         pst.close();
@@ -716,15 +1022,16 @@ public class FormBooking extends javax.swing.JFrame {
         Connection conn = koneksi.configDB();
 
         String sql = "UPDATE booking SET "
-                   + "id_member = ?, "
-                   + "id_lapangan = ?, "
-                   + "id_jadwal = ?, "
-                   + "tanggal_main = ?, "
-                   + "jumlah_jam = ?, "
-                   + "total_harga = ?, "
-                   + "catatan = ?, "
-                   + "status_booking = ? "
-                   + "WHERE kode_booking = ?";
+           + "id_member = ?, "
+           + "id_lapangan = ?, "
+           + "id_jadwal = ?, "
+           + "tanggal_main = ?, "
+           + "jumlah_jam = ?, "
+           + "total_harga = ?, "
+           + "catatan = ?, "
+           + "status_booking = ?, "
+           + "sumber_booking = ? "
+           + "WHERE kode_booking = ?";
 
         PreparedStatement pst = conn.prepareStatement(sql);
         pst.setInt(1, idMember);
@@ -735,7 +1042,8 @@ public class FormBooking extends javax.swing.JFrame {
         pst.setDouble(6, totalHarga);
         pst.setString(7, txtCatatan.getText().trim());
         pst.setString(8, cmbStatusBooking.getSelectedItem().toString());
-        pst.setString(9, txtKodeBooking.getText());
+        pst.setString(9, cmbSumberBooking.getSelectedItem().toString());
+        pst.setString(10, txtKodeBooking.getText());
 
         pst.executeUpdate();
         pst.close();
@@ -832,6 +1140,7 @@ public class FormBooking extends javax.swing.JFrame {
             txtTotalHarga.setText(rs.getString("total_harga"));
             txtCatatan.setText(rs.getString("catatan"));
             cmbStatusBooking.setSelectedItem(rs.getString("status_booking"));
+            cmbSumberBooking.setSelectedItem(rs.getString("sumber_booking"));
         }
 
         rs.close();
@@ -862,15 +1171,17 @@ public class FormBooking extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        System.setProperty("flatlaf.useNativeLibrary", "false");
+
+        javax.swing.UIManager.put("Button.arc", 10);
+        javax.swing.UIManager.put("Component.arc", 10);
+        javax.swing.UIManager.put("TextComponent.arc", 8);
+        javax.swing.UIManager.put("Table.rowHeight", 28);
+
+        com.formdev.flatlaf.FlatDarkLaf.setup();
+    } catch (Exception e) {
+        System.out.println("FlatLaf gagal dimuat: " + e.getMessage());
+    }
         //</editor-fold>
 
         /* Create and display the form */
@@ -890,7 +1201,6 @@ public class FormBooking extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbMember;
     private javax.swing.JComboBox<String> cmbStatusBooking;
     private com.toedter.calendar.JDateChooser dcTanggalMain;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -898,24 +1208,17 @@ public class FormBooking extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblBooking;
     private javax.swing.JTextField txtCari;
     private javax.swing.JTextField txtCatatan;
     private javax.swing.JTextField txtKodeBooking;
-    private javax.swing.JTextField txtKodeLapangan;
-    private javax.swing.JTextField txtKodeLapangan1;
     private javax.swing.JTextField txtTotalHarga;
     // End of variables declaration//GEN-END:variables
 }

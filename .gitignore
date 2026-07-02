@@ -1,18 +1,30 @@
-# NetBeans build output
-/build/
-
-# NetBeans private local settings
+# NetBeans
 /nbproject/private/
+/build/
+/dist/
+/nbbuild/
+/nbdist/
+/nbactions.xml
+/nb-configuration.xml
 
-# Java compiled files
+# Java
 *.class
+*.jar
+*.war
+*.ear
+*.log
 
-# OS junk
+# OS
 .DS_Store
 Thumbs.db
-desktop.ini
 
-# Logs and temp files
-*.log
+# Generated reports
+src/laporan/*.pdf
+
+# IDE
+.idea/
+.vscode/
+
+# Temporary files
 *.tmp
 *.bak
